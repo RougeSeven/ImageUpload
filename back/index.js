@@ -3,6 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://webback-sable.vercel.app'],
+    credentials: true,
+  })
+);
+
+app.use('/uploads/Images',express.static('uploads/images'));
+
+
 const fileRoutes = require('./routes/imageRoutes');
 app.use('/filesystem', fileRoutes);
 app.use(

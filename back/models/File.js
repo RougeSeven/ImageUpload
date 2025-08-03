@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const fileSchema = new mongoose.Schema({
-  fileType: String,
   fileName: String,
   filePath: String
 });
