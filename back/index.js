@@ -10,7 +10,7 @@ app.use(
   })
 );
 
-app.use('/uploads/Images',express.static('uploads/images'));
+app.use('/uploads/Images',express.static('uploads/Images'));
 
 
 const fileRoutes = require('./routes/imageRoutes');
