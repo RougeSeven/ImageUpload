@@ -61,6 +61,7 @@ function App() {
       setMessage('Error al subir la imagen.');
     } finally {
       setUploading(false);
+      handleGetFileList();
     }
   };
 
