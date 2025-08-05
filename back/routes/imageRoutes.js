@@ -6,6 +6,7 @@ const router = express.Router();
 
 const destination='uploads/Images';
 
+
 if(!fs.existsSync(destination))
 {
     fs.mkdirSync(destination, {recursive: true});
