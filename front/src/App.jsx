@@ -8,15 +8,15 @@ function App() {
   const [images, setImages]=useState([]);
   const [shownImage, setShownImage]=useState(null);
   const [message, setMessage] = useState('');
-  const BaseURI='https://imageupload-vgxx.onrender.com';
+  const BaseURI='http://localhost:3000';
 
   const setImageSource = async (fileId) =>{
     const chosenFile= await handleGetSingleFile(fileId);
-    setShownImage(BaseURI+chosenFile.filePath);
+    setShownImage(chosenFile.filePath);
   }
 
   const handleGetFileList = async () =>{
-    const response = await fetch('https://imageupload-vgxx.onrender.com/filesystem/files');
+    const response = await fetch('http://localhost:3000/filesystem/files');
     if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -24,7 +24,7 @@ function App() {
     setImages(result);
   };
   const handleGetSingleFile = async (fileId) =>{
-    const response = await fetch('https://imageupload-vgxx.onrender.com/filesystem/file/'+fileId);
+    const response = await fetch('http://localhost:3000/filesystem/file/'+fileId);
     if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -49,7 +49,7 @@ function App() {
     try {
       setUploading(true);
       setMessage('');
-      const response = await axios.post('https://imageupload-vgxx.onrender.com/filesystem/file', formData, {
+      const response = await axios.post('http://localhost:3000/filesystem/file', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

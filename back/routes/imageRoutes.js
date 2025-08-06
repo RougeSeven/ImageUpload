@@ -1,32 +1,31 @@
 const File=require('../models/File');
 const express=require('express');
 const multer = require('multer');
-const fs=require('fs');
 const router = express.Router();
+const {cloudinary, storage} = require('../cloudinaryConfig');
+
 
 const destination='uploads/Images';
 
 
-if(!fs.existsSync(destination))
+const upload = multer({storage});
+
+function createSignedURL(imageId, durationSeconds)
 {
-    fs.mkdirSync(destination, {recursive: true});
+    const signedUrl = cloudinary.url(imageId, {
+      sign_url: true, 
+      secure: true,
+      type: 'authenticated',
+      expires_at: Math.floor(Date.now() / 1000) + durationSeconds, 
+    });
+    return signedUrl;
 }
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, destination), // carpeta uploads/
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
-});
-
-
-
-const upload = multer({ storage });
 
 router.post('/file', upload.single('file'),async (req, res) => {
 try{
-    const filePathRelative='/'+req.file.destination+'/'+req.file.filename;
     const newFile=new File({
         fileName : req.file.filename,
-        filePath : filePathRelative
+        filePath : req.file.path
     });
     const savedFile= await newFile.save();
     res.status(200).json(savedFile, {message: 'file saved successfully'});
@@ -61,7 +60,12 @@ try{
         res.status(404).json({message: 'No file found'});
     }
     else{
-        res.status(200).json(fileResult);
+        const imageResponse={
+            fileName: fileResult.fileName,
+            filePath: createSignedURL(fileResult.fileName, 120)
+        }
+        console.log(imageResponse);
+        res.status(200).json(imageResponse);
     }
 }
 catch{
